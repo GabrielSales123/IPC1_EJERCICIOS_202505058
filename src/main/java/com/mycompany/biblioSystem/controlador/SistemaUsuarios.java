@@ -12,11 +12,11 @@ public class SistemaUsuarios {
       this.totUsuarios = 0; 
   }
   
-  public Usuario login(String id, String password) {
+  public Usuario login(String id, String password){
 
-    for (int i = 0; i < totUsuarios; i++) {
+    for (int i = 0; i < totUsuarios; i++){
         if (usuarios[i].getId().equals(id) &&
-            usuarios[i].getPassword().equals(password)) {
+            usuarios[i].getPassword().equals(password)){
             return usuarios[i];
         }
 
@@ -25,8 +25,13 @@ public class SistemaUsuarios {
     return null;
 }
   
-  public void agregarUsuario(Usuario u) {
-        if (totUsuarios < usuarios.length) {
+  public int getTotalUsuarios() {
+      return totUsuarios;
+  }
+  
+  
+  public void agregarUsuario(Usuario u){
+        if (totUsuarios < usuarios.length){
         usuarios[totUsuarios] = u;
         totUsuarios++;
         }
@@ -34,12 +39,28 @@ public class SistemaUsuarios {
   
   public void eliminarUsuario(String id){
       for (int i = 0; i < totUsuarios; i++){
-          if(usuarios[i].getId().equals(id)){
-              usuarios[i] = usuarios[totUsuarios -1];
-              totUsuarios--;
-              break;
+        if (usuarios[i].getId().equals(id)){
+            for (int j = i; j < totUsuarios - 1; j++){
+                usuarios[j] = usuarios[j + 1];
+            }
+            usuarios[totUsuarios - 1] = null;
+            totUsuarios--;
+            break;
+        }
+    }
+    reescribirArchivo();
+  }
+  
+  public void editarUsuario(String cambio, String nuevoId, String nuevoNombre, String nuevaPassword){
+      for (int i = 0; i < totUsuarios; i++){
+          if (usuarios[i].getId().equals(cambio)){
+              usuarios[i].setNombre(nuevoNombre);
+              usuarios[i].setPassword(nuevaPassword);
+              usuarios[i].setId(nuevoId);
+              
           }
       }
+       reescribirArchivo();
   }
   
   public void mostrarUsuarios(){
@@ -91,6 +112,33 @@ public class SistemaUsuarios {
       
   }
   
+  public void reescribirArchivo() {
+    try {
+        FileWriter fw = new FileWriter("cuentas.txt"); 
+        BufferedWriter bw = new BufferedWriter(fw);
+
+        for (int i = 0; i < totUsuarios; i++) {
+            Usuario u = usuarios[i];
+
+            if (u != null) {
+                bw.write(
+                    u.getId() + ";" +
+                    u.getNombre() + ";" +
+                    u.getPassword() + ";" +
+                    u.getRol()
+                );
+                bw.newLine();
+            }
+        }
+
+        bw.close();
+
+    } catch (IOException e) {
+        System.out.println("Error al reescribir archivo");
+    }
+}
+  
+  //ACCIONES PARA OPERADORES---------------------------------
   
   public  Usuario[] getOperadores() {
     int contador = 0;
@@ -131,6 +179,6 @@ public class SistemaUsuarios {
         System.out.println("Error al guardar operador");
     }
 }
-  
+  //---------------------------------------------------------------------
   
 }

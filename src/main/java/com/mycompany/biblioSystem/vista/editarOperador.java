@@ -3,26 +3,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package com.mycompany.biblioSystem.vista;
+
 import com.mycompany.biblioSystem.controlador.*;
-import com.mycompany.biblioSystem.modelo.*;
 
 /**
  *
  * @author Andri
  */
-public class Operador extends javax.swing.JDialog {
+public class editarOperador extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Operador.class.getName());
-    private SistemaUsuarios sistema;
-    
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(editarOperador.class.getName());
+    private SistemaUsuarios sistema; 
+    private String idOriginal;
     /**
-     * Creates new form Operador
+     * Creates new form editarOperador
      */
-    public Operador(java.awt.Frame parent, boolean modal, SistemaUsuarios sistema) {
+    public editarOperador(java.awt.Frame parent, boolean modal, SistemaUsuarios sistema, String cambio) {
         super(parent, modal);
         this.sistema = sistema;
+        this.idOriginal = cambio;
         initComponents();
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,17 +36,15 @@ public class Operador extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        idTxt = new javax.swing.JTextField();
         nombreTxt = new javax.swing.JTextField();
         passwordTxt = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         confirmar = new javax.swing.JButton();
+        idTxt = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        idTxt.addActionListener(this::idTxtActionPerformed);
 
         passwordTxt.addActionListener(this::passwordTxtActionPerformed);
 
@@ -55,6 +56,8 @@ public class Operador extends javax.swing.JDialog {
 
         confirmar.setText("jButton1");
         confirmar.addActionListener(this::confirmarActionPerformed);
+
+        idTxt.addActionListener(this::idTxtActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -100,22 +103,22 @@ public class Operador extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void idTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idTxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_idTxtActionPerformed
-
     private void passwordTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTxtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_passwordTxtActionPerformed
 
     private void confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarActionPerformed
-       String id = idTxt.getText();
-       String nombre = nombreTxt.getText();
-       String password = (passwordTxt.getText());
-        sistema.agregarOperador(id, nombre, password);
+        String id = idTxt.getText();
+        String nombre = nombreTxt.getText();
+        String password = (passwordTxt.getText());
+        sistema.editarUsuario(idOriginal, id, nombre, password);
         dispose();
-        
+
     }//GEN-LAST:event_confirmarActionPerformed
+
+    private void idTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idTxtActionPerformed
 
     /**
      * @param args the command line arguments

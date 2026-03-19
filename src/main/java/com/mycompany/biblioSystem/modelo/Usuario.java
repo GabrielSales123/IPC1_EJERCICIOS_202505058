@@ -18,6 +18,11 @@ public abstract class Usuario {
         return nombre;
     }
     
+    public String setNombre(String nombre){
+        this.nombre = nombre;
+        return nombre;
+    }
+    
     public String getRol(){
         return rol; 
     }
@@ -26,7 +31,17 @@ public abstract class Usuario {
         return password; 
     }
     
+    public String setPassword(String password){
+        this.password = password;
+        return password;
+    }
+    
     public String getId(){
         return id; 
+    }
+    
+    public String setId(String id){
+        this.id = id;
+        return id;
     }
 }

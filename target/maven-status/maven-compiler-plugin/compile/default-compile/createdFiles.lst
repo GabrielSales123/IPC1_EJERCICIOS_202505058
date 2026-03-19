@@ -1,12 +1,14 @@
+com\mycompany\biblioSystem\vista\agregarOperador.class
+com\mycompany\biblioSystem\vista\editarOperador.class
 com\mycompany\biblioSystem\vista\MenuPrincipal.class
 com\mycompany\biblioSystem\controlador\SistemaUsuarios.class
 com\mycompany\biblioSystem\vista\Login$2.class
 com\mycompany\biblioSystem\modelo\Administrador.class
-com\mycompany\biblioSystem\vista\Operador.class
 com\mycompany\biblioSystem\modelo\Operador.class
 com\mycompany\biblioSystem\principal\Principal.class
 com\mycompany\biblioSystem\modelo\Usuario.class
 com\mycompany\biblioSystem\vista\Login.class
+com\mycompany\biblioSystem\vista\MenuPrincipal$2.class
 com\mycompany\biblioSystem\controlador\controlAutenticacion.class
 com\mycompany\biblioSystem\modelo\Estudiante.class
 com\mycompany\biblioSystem\vista\Login$1.class
