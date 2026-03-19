@@ -1,0 +1,8 @@
+ADMIN;Gabriel;ADMIN;ADMIN
+Amongus;Pol;123;OPERADOR
+Ola123;Mafer;123;OPERADOR
+prueba;juanito;456;OPERADOR
+prueba2;Jose;123;OPERADOR
+prueba3;gab;123;OPERADOR
+prueba4;prueba4;123;OPERADOR
+prueba5;prueba5;456;OPERADOR

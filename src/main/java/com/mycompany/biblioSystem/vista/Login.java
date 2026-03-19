@@ -1,17 +1,16 @@
 
 package com.mycompany.biblioSystem.vista;
-
+import com.mycompany.biblioSystem.controlador.*;
+import com.mycompany.biblioSystem.modelo.*;
 
 public class Login extends javax.swing.JFrame {
     
     public static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
-
-    /**
-     * Creates new form Login
-     */
-    public Login() {
-        System.out.println(getClass().getResource("/imagenes/libro.jpg"));
+    private controlAutenticacion auth;
+    
+    public Login(SistemaUsuarios sistema) {
         initComponents();
+        auth = new controlAutenticacion(sistema);
         
     }
 
@@ -156,7 +155,17 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_logUsuarioActionPerformed
 
     private void logConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logConfirmActionPerformed
-        // TODO add your handling code here:
+        String usuario = logUsuario.getText();
+        var password = new String(logPassword.getPassword());
+        Usuario u = auth.login(usuario, password);
+        if(u != null){
+        java.awt.EventQueue.invokeLater(() -> new MenuPrincipal(auth.getSistema()).setVisible(true));
+        System.out.println("Login correcto");
+        dispose();
+    }else{
+        System.out.println("Usuario o contraseña incorrectos");
+    }
+        
     }//GEN-LAST:event_logConfirmActionPerformed
 
     private void logPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logPasswordActionPerformed
@@ -195,7 +204,6 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

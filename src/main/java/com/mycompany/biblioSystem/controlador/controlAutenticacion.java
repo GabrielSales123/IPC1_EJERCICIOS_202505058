@@ -1,13 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.biblioSystem.controlador;
 
-/**
- *
- * @author Andri
- */
+package com.mycompany.biblioSystem.controlador;
+import com.mycompany.biblioSystem.modelo.*;
+
 public class controlAutenticacion {
+ 
+    private SistemaUsuarios sistemaUsuarios;
+
+    public controlAutenticacion(SistemaUsuarios sistemaUsuarios) {
+        this.sistemaUsuarios = sistemaUsuarios;
+    }
+
+    public Usuario login(String id, String password) {
+        return sistemaUsuarios.login(id, password);
+    }   
     
+    public SistemaUsuarios getSistema(){
+        return sistemaUsuarios;
+    }
 }
