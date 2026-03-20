@@ -7,9 +7,15 @@ public class Login extends javax.swing.JFrame {
     
     public static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
     private controlAutenticacion auth;
+    private SistemaUsuarios sistema;
+    private SistemaLibros sistemaLib;
+    private SistemaPrestamos sistemap;
     
-    public Login(SistemaUsuarios sistema) {
+    public Login(SistemaUsuarios sistema, SistemaLibros sistemaLib, SistemaPrestamos sistemap) {
         initComponents();
+        this.sistema = sistema;
+        this.sistemaLib = sistemaLib;
+        this.sistemap = sistemap;
         auth = new controlAutenticacion(sistema);
         
     }
@@ -159,9 +165,10 @@ public class Login extends javax.swing.JFrame {
         var password = new String(logPassword.getPassword());
         Usuario u = auth.login(usuario, password);
         if(u != null){
-        java.awt.EventQueue.invokeLater(() -> new MenuPrincipal(auth.getSistema()).setVisible(true));
-        System.out.println("Login correcto");
-        dispose();
+        java.awt.EventQueue.invokeLater(() -> {
+    new MenuPrincipal(sistema, sistemaLib, sistemap).setVisible(true);
+});
+this.dispose();
     }else{
         System.out.println("Usuario o contraseña incorrectos");
     }

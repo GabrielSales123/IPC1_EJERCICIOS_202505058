@@ -223,7 +223,7 @@
                               <Group type="102" attributes="0">
                                   <Component id="nuevoLibro" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="editarLibro" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="eliminarLibro" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace pref="69" max="32767" attributes="0"/>
@@ -242,7 +242,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="nuevoLibro" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="editarLibro" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="eliminarLibro" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="buscarLibros" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -263,10 +263,13 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nuevoLibroActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="jButton1">
+                <Component class="javax.swing.JButton" name="editarLibro">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Modificar"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editarLibroActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="eliminarLibro">
                   <Properties>
@@ -277,11 +280,9 @@
                   </Events>
                 </Component>
                 <Component class="javax.swing.JTextField" name="buscarLibros">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="ISBN, TITUlo"/>
-                  </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buscarLibrosActionPerformed"/>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="buscarLibrosKeyReleased"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel10">
@@ -431,11 +432,15 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Eliminar"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="eliminarUsuarioActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JTextField" name="buscarUsuario">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="jTextField2"/>
-                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buscarUsuarioActionPerformed"/>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="buscarUsuarioKeyReleased"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel11">
                   <Properties>
@@ -446,14 +451,14 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTable" name="tableUsuarios">
+                    <Component class="javax.swing.JTable" name="tablaUsuarios">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="4" rowCount="4">
-                            <Column editable="true" title="No. Carn&#xe9;" type="java.lang.Object"/>
-                            <Column editable="true" title="Nombre completo" type="java.lang.Object"/>
-                            <Column editable="true" title="Carrera" type="java.lang.Object"/>
-                            <Column editable="true" title="Correo electr&#xf3;nico" type="java.lang.Object"/>
+                            <Column editable="false" title="No. Carn&#xe9;" type="java.lang.String"/>
+                            <Column editable="false" title="Nombre completo" type="java.lang.String"/>
+                            <Column editable="true" title="Carrera" type="java.lang.String"/>
+                            <Column editable="true" title="Correo electr&#xf3;nico" type="java.lang.String"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -510,7 +515,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane7" max="32767" attributes="0"/>
+                              <Component id="jScrollPane7" pref="690" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Component id="nuevoPrestamo" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -518,8 +523,8 @@
                                   <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                                   <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="tipoDevolucion" min="-2" pref="117" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="225" max="32767" attributes="0"/>
+                                  <Component id="tipoDevolucion" min="-2" pref="181" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -548,6 +553,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Nuevo prestamo"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nuevoPrestamoActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="registrarPrestamo">
                   <Properties>
@@ -579,7 +587,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTable" name="jTable4">
+                    <Component class="javax.swing.JTable" name="tablaPrestamos">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="6" rowCount="4">
@@ -840,12 +848,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="nuevoOperador" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="modificarOperador" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="eliminarOperador" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="buscadorOperadores" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="nuevoOperador" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="modificarOperador" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="eliminarOperador" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="365" max="-2" attributes="0"/>
