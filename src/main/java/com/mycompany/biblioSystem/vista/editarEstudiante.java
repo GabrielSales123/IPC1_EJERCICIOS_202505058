@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
+
 package com.mycompany.biblioSystem.vista;
 import com.mycompany.biblioSystem.modelo.*;
 import com.mycompany.biblioSystem.controlador.*;
-/**
- *
- * @author Andri
- */
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
 public class editarEstudiante extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(editarEstudiante.class.getName());
@@ -22,6 +18,8 @@ public class editarEstudiante extends javax.swing.JDialog {
         this.sistema = sistema;
         this.IdOriginal = cambio;
         initComponents();
+        Image icono = new ImageIcon(getClass().getResource("/imagenes/icon.jpeg")).getImage();
+        setIconImage(icono);
     }
 
     /**

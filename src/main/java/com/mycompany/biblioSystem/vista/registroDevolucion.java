@@ -2,7 +2,8 @@
 package com.mycompany.biblioSystem.vista;
 import com.mycompany.biblioSystem.controlador.*;
 import com.mycompany.biblioSystem.modelo.*;
-
+import java.awt.Image;
+import javax.swing.ImageIcon;
 public class registroDevolucion extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(registroDevolucion.class.getName());
@@ -16,6 +17,8 @@ public class registroDevolucion extends javax.swing.JDialog {
         this.sistema = sistema;
         this.IdCambio = cambio;
         initComponents();
+        Image icono = new ImageIcon(getClass().getResource("/imagenes/icon.jpeg")).getImage();
+        setIconImage(icono);
     }
 
     /**

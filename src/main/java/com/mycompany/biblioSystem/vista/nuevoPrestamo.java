@@ -4,6 +4,8 @@ import java.util.*;
 import java.text.*;
 import com.mycompany.biblioSystem.controlador.*;
 import com.mycompany.biblioSystem.modelo.*;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 /**
  *
  * @author Andri
@@ -24,6 +26,8 @@ public class nuevoPrestamo extends javax.swing.JDialog {
         this.sistemau = sistemau;
         this.sistemalib = sistemalib;
         initComponents();
+        Image icono = new ImageIcon(getClass().getResource("/imagenes/icon.jpeg")).getImage();
+        setIconImage(icono);
         
         devolucionTxt.setEditable(false);
         fechaSpinn.setModel(new javax.swing.SpinnerDateModel());

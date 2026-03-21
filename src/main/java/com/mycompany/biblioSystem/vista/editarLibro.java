@@ -2,7 +2,8 @@
 package com.mycompany.biblioSystem.vista;
 
 import com.mycompany.biblioSystem.controlador.*;
-
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 public class editarLibro extends javax.swing.JDialog {
     
@@ -17,6 +18,8 @@ public class editarLibro extends javax.swing.JDialog {
         this.sistema = sistema;
         this.codigoOriginal = cambio;
         initComponents();
+        Image icono = new ImageIcon(getClass().getResource("/imagenes/icon.jpeg")).getImage();
+        setIconImage(icono);
     }
 
     /**

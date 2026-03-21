@@ -1,7 +1,8 @@
 
 package com.mycompany.biblioSystem.vista;
 import com.mycompany.biblioSystem.controlador.*;
-
+import java.awt.Image;
+import javax.swing.ImageIcon;
 public class agregarLibro extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(agregarLibro.class.getName());
@@ -11,6 +12,8 @@ public class agregarLibro extends javax.swing.JDialog {
         super(parent, modal);
         this.sistema = sistema; 
         initComponents();
+        Image icono = new ImageIcon(getClass().getResource("/imagenes/icon.jpeg")).getImage();
+        setIconImage(icono);
     }
 
     /**
@@ -37,10 +40,11 @@ public class agregarLibro extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         disponiblesTxt = new javax.swing.JTextField();
         confirmButton = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("Codigo");
+        jLabel1.setText("Código");
 
         jLabel2.setText("ISBN");
 
@@ -50,21 +54,23 @@ public class agregarLibro extends javax.swing.JDialog {
 
         jLabel5.setText("Genero");
 
-        jLabel6.setText("Año");
+        jLabel6.setText("Año de Publicación");
 
-        jLabel7.setText("Disponibles");
+        jLabel7.setText("Cantidad disponible");
 
         disponiblesTxt.addActionListener(this::disponiblesTxtActionPerformed);
 
-        confirmButton.setText("jButton1");
+        confirmButton.setText("Aceptar");
         confirmButton.addActionListener(this::confirmButtonActionPerformed);
+
+        jLabel8.setText("Agregar Libro");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel1)
@@ -80,14 +86,17 @@ public class agregarLibro extends javax.swing.JDialog {
                         .addComponent(jLabel6)
                         .addComponent(anioTxt)
                         .addComponent(jLabel7)
-                        .addComponent(disponiblesTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
-                    .addComponent(confirmButton))
-                .addContainerGap(167, Short.MAX_VALUE))
+                        .addComponent(disponiblesTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(confirmButton)
+                    .addComponent(jLabel8))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(34, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(codigoTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -117,7 +126,7 @@ public class agregarLibro extends javax.swing.JDialog {
                 .addComponent(disponiblesTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(confirmButton)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGap(57, 57, 57))
         );
 
         pack();
@@ -170,6 +179,7 @@ public class agregarLibro extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JTextField tituloTxt;
     // End of variables declaration//GEN-END:variables
 }

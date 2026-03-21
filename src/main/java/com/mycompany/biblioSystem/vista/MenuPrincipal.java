@@ -4,7 +4,8 @@ import com.mycompany.biblioSystem.controlador.*;
 import com.mycompany.biblioSystem.modelo.*;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
-
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 public class MenuPrincipal extends javax.swing.JFrame {
     
@@ -25,6 +26,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.sistemarep = sistemarep;
         this.usuarioActual = usuarioActual;
         initComponents();
+        Image icono = new ImageIcon(getClass().getResource("/imagenes/icon.jpeg")).getImage();
+        setIconImage(icono);
         configurarPermisos();
         cargarTablaOperadores();
         cargarTablaUsuarios();

@@ -5,7 +5,8 @@
 package com.mycompany.biblioSystem.vista;
 import com.mycompany.biblioSystem.controlador.*;
 import com.mycompany.biblioSystem.modelo.*;
-
+import java.awt.Image;
+import javax.swing.ImageIcon;
 /**
  *
  * @author Andri
@@ -22,6 +23,8 @@ public class agregarOperador extends javax.swing.JDialog {
         super(parent, modal);
         this.sistema = sistema;
         initComponents();
+        Image icono = new ImageIcon(getClass().getResource("/imagenes/icon.jpeg")).getImage();
+        setIconImage(icono);
     }
 
     /**

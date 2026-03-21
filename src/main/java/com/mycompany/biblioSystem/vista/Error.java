@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package com.mycompany.biblioSystem.vista;
-
+import java.awt.Image;
+import javax.swing.ImageIcon;
 /**
  *
  * @author Andri
@@ -19,6 +20,8 @@ public class Error extends javax.swing.JDialog {
         super(parent, modal);
         this.mensajeError = error; 
         initComponents();
+        Image icono = new ImageIcon(getClass().getResource("/imagenes/icon.jpeg")).getImage();
+        setIconImage(icono);
         ErrorTxt.setText(mensajeError);
     }
 

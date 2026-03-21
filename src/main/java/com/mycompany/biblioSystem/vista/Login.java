@@ -2,6 +2,8 @@
 package com.mycompany.biblioSystem.vista;
 import com.mycompany.biblioSystem.controlador.*;
 import com.mycompany.biblioSystem.modelo.*;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 public class Login extends javax.swing.JFrame {
     
@@ -15,6 +17,8 @@ public class Login extends javax.swing.JFrame {
     
     public Login(SistemaUsuarios sistema, SistemaLibros sistemaLib, SistemaPrestamos sistemap, SistemaReportes sistemarep) {
         initComponents();
+        Image icono = new ImageIcon(getClass().getResource("/imagenes/icon.jpeg")).getImage();
+        setIconImage(icono);
         this.sistema = sistema;
         this.sistemaLib = sistemaLib;
         this.sistemap = sistemap;
@@ -36,6 +40,7 @@ public class Login extends javax.swing.JFrame {
         logConfirm = new javax.swing.JToggleButton();
         logPassword = new javax.swing.JPasswordField();
         passVisible = new javax.swing.JToggleButton();
+        btnCrearUsuario = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("BiblioSystem: Log In");
@@ -47,7 +52,7 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(153, 153, 153));
         jLabel2.setText("Universidad - Intoducción a la Programacion 1");
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/libro.jpg"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Logo.jpeg"))); // NOI18N
 
         jLabel1.setText("Usuario:");
 
@@ -68,6 +73,9 @@ public class Login extends javax.swing.JFrame {
         passVisible.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ojocerrado.png"))); // NOI18N
         passVisible.addActionListener(this::passVisibleActionPerformed);
 
+        btnCrearUsuario.setText("Crear Usuario");
+        btnCrearUsuario.addActionListener(this::btnCrearUsuarioActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,14 +90,17 @@ public class Login extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(logConfirm)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(logConfirm)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCrearUsuario))
                             .addComponent(jLabel1)
                             .addComponent(logUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                             .addComponent(jLabel4)
                             .addComponent(logPassword))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(passVisible)))
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,7 +123,9 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(passVisible, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(logPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(logConfirm)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(logConfirm)
+                    .addComponent(btnCrearUsuario))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -199,6 +212,12 @@ this.dispose();
     }
     }//GEN-LAST:event_passVisibleActionPerformed
 
+    private void btnCrearUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearUsuarioActionPerformed
+        agregarEstudiante dialog = new agregarEstudiante(this, true, sistema); 
+        dialog.setVisible(true);
+        
+    }//GEN-LAST:event_btnCrearUsuarioActionPerformed
+
     public static void menu() {
        
         try {
@@ -217,6 +236,7 @@ this.dispose();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCrearUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     public javax.swing.JLabel jLabel3;
