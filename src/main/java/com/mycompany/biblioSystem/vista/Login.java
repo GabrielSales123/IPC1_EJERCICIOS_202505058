@@ -10,12 +10,15 @@ public class Login extends javax.swing.JFrame {
     private SistemaUsuarios sistema;
     private SistemaLibros sistemaLib;
     private SistemaPrestamos sistemap;
+    private SistemaReportes sistemarep;
     
-    public Login(SistemaUsuarios sistema, SistemaLibros sistemaLib, SistemaPrestamos sistemap) {
+    
+    public Login(SistemaUsuarios sistema, SistemaLibros sistemaLib, SistemaPrestamos sistemap, SistemaReportes sistemarep) {
         initComponents();
         this.sistema = sistema;
         this.sistemaLib = sistemaLib;
         this.sistemap = sistemap;
+        this.sistemarep = sistemarep;
         auth = new controlAutenticacion(sistema);
         
     }
@@ -166,7 +169,7 @@ public class Login extends javax.swing.JFrame {
         Usuario u = auth.login(usuario, password);
         if(u != null){
         java.awt.EventQueue.invokeLater(() -> {
-    new MenuPrincipal(sistema, sistemaLib, sistemap).setVisible(true);
+    new MenuPrincipal(sistema, sistemaLib, sistemap, sistemarep, u).setVisible(true);
 });
 this.dispose();
     }else{

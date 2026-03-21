@@ -138,9 +138,18 @@ public class agregarEstudiante extends javax.swing.JDialog {
         String carne = carneTxt.getText();
         String correo = correoTxt.getText();
         String carrera = carreraTxt.getText();
+        if(!id.isEmpty() && !nombre.isEmpty() && !password.isEmpty() && !carne.isEmpty() && 
+           !correo.isEmpty() && !carrera.isEmpty()){
+        if(sistema.revisarEstudiantes(carne, id) == false){
         sistema.agregarEstudiante(id, nombre, password, carne, carrera, correo);
         dispose();
-
+        }
+        else{String error = "Error1: el id o carne ya esta asociado a un usuario";
+            Error dialog = new Error(null, true, error);
+            dialog.setVisible(true);}
+        }else{String error = "Error6: Campos incompletos";
+            Error dialog = new Error(null, true, error);
+            dialog.setVisible(true);}
     }//GEN-LAST:event_confirmarActionPerformed
 
     private void idTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idTxtActionPerformed

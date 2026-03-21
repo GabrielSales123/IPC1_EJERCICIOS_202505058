@@ -12,23 +12,204 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private SistemaUsuarios sistema;
     private SistemaLibros sistemalib;
     private SistemaPrestamos sistemap;
+    private SistemaReportes sistemarep;
+    private Usuario usuarioActual;
     /**
      * Creates new form MenuPrincipal
      */
-    public MenuPrincipal(SistemaUsuarios sistema, SistemaLibros sistemalib, SistemaPrestamos sistemap) {
+    public MenuPrincipal(SistemaUsuarios sistema, SistemaLibros sistemalib, 
+            SistemaPrestamos sistemap, SistemaReportes sistemarep, Usuario usuarioActual) {
         this.sistema = sistema;
         this.sistemalib = sistemalib;
         this.sistemap = sistemap;
+        this.sistemarep = sistemarep;
+        this.usuarioActual = usuarioActual;
         initComponents();
+        configurarPermisos();
         cargarTablaOperadores();
         cargarTablaUsuarios();
         cargarTablaLibros();
         cargarTablaPrestamos();
         iniciarFiltroPrestamos();
+        iniciarReportes();
+        mostrarLibrosDisponibles();
         cantUsuarios.setText("Usuarios: "+(sistema.getTotalUsuarios()-1)+"/50");
         cantLibros.setText("Libros: "+(sistemalib.getTotalLibros())+"/100");
+        cantPrestamos.setText("Prestamos activos: "+ (sistemap.getPrestamosActivos())  +"/200");
+        
     }
 
+    private void configurarPermisos() {
+
+        String rol = usuarioActual.getRol();
+
+        if (rol.equals("ADMIN")) {
+            tipoSesion.setText("Sesion: Administrador del Sistema");
+            tipoRol.setText("Rol: Administrador");
+            Bitacora.registrar("LOGIN", usuarioActual.getId(), "AUTENTICACION");
+           
+        } 
+        else if (rol.equals("OPERADOR")) {
+            menu.remove(4); 
+            tipoSesion.setText("Sesion: Operador del Sistema");
+            tipoRol.setText("Rol: Operador");
+            Bitacora.registrar("LOGIN", usuarioActual.getId(), "AUTENTICACION");
+        } 
+        else if (rol.equals("ESTUDIANTE")) {
+            tipoSesion.setText("Sesion: Estudiante");
+            tipoRol.setText("Rol: Estudiante");
+            Bitacora.registrar("LOGIN", usuarioActual.getId(), "AUTENTICACION");
+            menu.remove(4); 
+            menu.remove(3); 
+            menu.remove(1);
+        }
+}
+    
+    
+    
+    public void iniciarReportes(){
+    comboReportes.setModel(new javax.swing.DefaultComboBoxModel<>(
+    new String[] { 
+        "Libros disponibles", 
+        "Préstamos vencidos", 
+        "Top 5 libros", 
+        "Estudiantes activos" 
+    }
+    ));
+    }
+    
+    private void mostrarLibrosDisponibles() {
+
+    DefaultTableModel modelo = new DefaultTableModel();
+    modelo.setColumnIdentifiers(new String[]{"Código", "Título", "Disponibles"});
+
+    tablaReportes.setModel(modelo);
+
+    Libro[] lista = sistemalib.getLibros();
+
+    for (int i = 0; i < sistemalib.getTotalLibros(); i++) {
+
+        Libro l = lista[i];
+
+        if (l.getDisponibles() > 0) {
+            modelo.addRow(new Object[]{
+                l.getCodigo(),
+                l.getTitulo(),
+                l.getDisponibles()
+            });
+        }
+    }
+}
+    
+    private void mostrarPrestamosVencidos() {
+
+    DefaultTableModel modelo = new DefaultTableModel();
+    modelo.setColumnIdentifiers(new String[]{"Código", "Carnet", "Libro", "Fecha"});
+
+    tablaReportes.setModel(modelo);
+
+    Prestamo[] lista = sistemap.getPrestamos();
+
+    for (int i = 0; i < sistemap.getTotPrestamos(); i++) {
+
+        Prestamo p = lista[i];
+
+        if (p.getEstado().equals("VENCIDO")) {
+
+            modelo.addRow(new Object[]{
+                p.getCodigoPrestamo(),
+                p.getCarnet(),
+                sistemalib.getNombreLibroPorCodigo(p.getCodigoLibro()),
+                p.getFechaLimite()
+            });
+        }
+    }
+}
+    
+    private void mostrarTop5() {
+
+    DefaultTableModel modelo = new DefaultTableModel();
+    modelo.setColumnIdentifiers(new String[]{"Título", "Veces prestado"});
+
+    tablaReportes.setModel(modelo);
+
+    Libro[] listaLibros = sistemalib.getLibros();
+    Prestamo[] listaPrestamos = sistemap.getPrestamos();
+
+    int n = sistemalib.getTotalLibros();
+    int[] contador = new int[n];
+
+    for (int i = 0; i < sistemap.getTotPrestamos(); i++) {
+
+        Prestamo p = listaPrestamos[i];
+
+        for (int j = 0; j < n; j++) {
+            if (listaLibros[j].getCodigo().equals(p.getCodigoLibro())) {
+                contador[j]++;
+            }
+        }
+    }
+
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+
+            if (contador[j] < contador[j + 1]) {
+
+                int temp = contador[j];
+                contador[j] = contador[j + 1];
+                contador[j + 1] = temp;
+
+                Libro aux = listaLibros[j];
+                listaLibros[j] = listaLibros[j + 1];
+                listaLibros[j + 1] = aux;
+            }
+        }
+    }
+
+    for (int i = 0; i < 5 && i < n; i++) {
+        modelo.addRow(new Object[]{
+            listaLibros[i].getTitulo(),
+            contador[i]
+        });
+    }
+}
+    
+    private void mostrarEstudiantesActivos() {
+
+    DefaultTableModel modelo = new DefaultTableModel();
+    modelo.setColumnIdentifiers(new String[]{"Carnet", "Nombre", "Activos", "Vencidos"});
+
+    tablaReportes.setModel(modelo);
+
+    Usuario[] lista = sistema.getUsuarios();
+
+    for (int i = 0; i < sistema.getTotalUsuarios(); i++) {
+
+        if (lista[i] instanceof Estudiante) {
+
+            Estudiante e = (Estudiante) lista[i];
+
+            int activos = sistema.getPrestamosEstudiantePorCarnet(e.getCarne());
+            boolean vencidos = sistema.getEstadoEstudiantePorCarnet(e.getCarne());
+
+            if (activos > 0) {
+                modelo.addRow(new Object[]{
+                    e.getCarne(),
+                    e.getNombre(),
+                    activos,
+                    (vencidos ? "Sí" : "No")
+                });
+            }
+        }
+    }
+}
+    
+    public void cargarTablas(){
+        cargarTablaOperadores();
+        cargarTablaUsuarios();
+        cargarTablaLibros();
+        cargarTablaPrestamos();
+    }
     public void cargarTablaOperadores() {
    DefaultTableModel modelo = (DefaultTableModel) tablaOperadores.getModel();
    modelo.setRowCount(0);
@@ -118,6 +299,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             lib[i].getDisponibles()
         });
     }
+    cargarTablaPrestamos();
     }
     
     public void buscarTablaLibros(String busqueda) {
@@ -146,27 +328,61 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
     
     public void cargarTablaPrestamos() {
-   DefaultTableModel modelo = (DefaultTableModel) tablaPrestamos.getModel();
-   modelo.setRowCount(0);
-   Prestamo[] p = sistemap.getPrestamos();
-    for (int i = 0; i < p.length; i++) {
-        modelo.addRow(new Object[]{
-            p[i].getCodigoPrestamo(),
-            p[i].getCarnet(),
-            p[i].getCodigoLibro(),
-            p[i].getFechaPrestamo(),
-            p[i].getFechaLimite(),
-            p[i].getEstado()
-        });
+         DefaultTableModel modelo = (DefaultTableModel) tablaPrestamos.getModel();
+    modelo.setRowCount(0);
+
+    Prestamo[] p = sistemap.getPrestamos();
+
+    if (!usuarioActual.getRol().equals("ESTUDIANTE")) {
+
+        
+        for (int i = 0; i < sistemap.getTotPrestamos(); i++) {
+
+            String nombreEstudiante = sistema.getNombreEstudiantePorCarnet(p[i].getCarnet());
+            String nombreLibro = sistemalib.getNombreLibroPorCodigo(p[i].getCodigoLibro());
+
+            modelo.addRow(new Object[]{
+                p[i].getCodigoPrestamo(),
+                nombreEstudiante,
+                nombreLibro,
+                p[i].getFechaPrestamo(),
+                p[i].getFechaLimite(),
+                p[i].getEstado()
+            });
+        }
+
+    } else {
+
+        
+        String carnet = ((Estudiante) usuarioActual).getCarne();
+
+        for (int i = 0; i < sistemap.getTotPrestamos(); i++) {
+
+            if (p[i].getCarnet().equals(carnet)) {
+
+                String nombreEstudiante = sistema.getNombreEstudiantePorCarnet(p[i].getCarnet());
+                String nombreLibro = sistemalib.getNombreLibroPorCodigo(p[i].getCodigoLibro());
+
+                modelo.addRow(new Object[]{
+                    p[i].getCodigoPrestamo(),
+                    nombreEstudiante,
+                    nombreLibro,
+                    p[i].getFechaPrestamo(),
+                    p[i].getFechaLimite(),
+                    p[i].getEstado()
+                });
+            }
+        }
     }
-    }
-    
+    }  
     
     public void actualizarDatos(){
         String Usuarios = String.valueOf(sistema.getTotalUsuarios()-1);
         String Libros = String.valueOf(sistemalib.getTotalLibros());
+        String Prestamos = String.valueOf(sistemap.getPrestamosActivos());
         cantUsuarios.setText("Usuarios: "+Usuarios+"/50");
         cantLibros.setText("Libros: "+Libros+"/100");
+        cantPrestamos.setText("Prestamos activos: "+ Prestamos +"/200");
     }
     
     public void iniciarFiltroPrestamos(){
@@ -191,24 +407,38 @@ public class MenuPrincipal extends javax.swing.JFrame {
     
     
     public void buscarTablaPrestamos(String busqueda) {
-        DefaultTableModel modelo = (DefaultTableModel) tablaPrestamos.getModel();
-   modelo.setRowCount(0);
-   Prestamo[] p = sistemap.getPrestamos();
-   
-    for (int i = 0; i < p.length; i++) {
-       String estado = p[i].getEstado();
-        if(estado != null && estado.toLowerCase().contains(busqueda.toLowerCase())){
-        modelo.addRow(new Object[]{
-            p[i].getCodigoPrestamo(),
-            p[i].getCarnet(),
-            p[i].getCodigoLibro(),
-            p[i].getFechaPrestamo(),
-            p[i].getFechaLimite(),
-            p[i].getEstado()
-            
-        });
+    DefaultTableModel modelo = (DefaultTableModel) tablaPrestamos.getModel();
+    modelo.setRowCount(0);
+    Prestamo[] p = sistemap.getPrestamos();
+
+    String rol = usuarioActual.getRol();
+    String carnet = usuarioActual.getId();
+
+    for (int i = 0; i < sistemap.getTotPrestamos(); i++) {
+
+        String estado = p[i].getEstado();
+
+        if (estado != null && estado.toLowerCase().contains(busqueda.toLowerCase())) {
+
+         
+            if (!rol.equals("ESTUDIANTE") || 
+                p[i].getCarnet().trim().equals(carnet.trim())) {
+
+                String nombreEstudiante = sistema.getNombreEstudiantePorCarnet(p[i].getCarnet());
+                String nombreLibro = sistemalib.getNombreLibroPorCodigo(p[i].getCodigoLibro());
+
+                modelo.addRow(new Object[]{
+                    p[i].getCodigoPrestamo(),
+                    nombreEstudiante,
+                    nombreLibro,
+                    p[i].getFechaPrestamo(),
+                    p[i].getFechaLimite(),
+                    p[i].getEstado()
+                });
+            }
+        }
     }
-    }
+
     }
     
     
@@ -261,7 +491,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        tipoReporte = new javax.swing.JComboBox<>();
+        comboReportes = new javax.swing.JComboBox<>();
+        btnMostrar = new javax.swing.JButton();
+        btnGenerar = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
         scrollReportes = new javax.swing.JScrollPane();
         tablaReportes = new javax.swing.JTable();
@@ -570,7 +802,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         jLabel14.setText("Reporte: ");
 
-        tipoReporte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboReportes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btnMostrar.setText("Mostrar");
+        btnMostrar.addActionListener(this::btnMostrarActionPerformed);
+
+        btnGenerar.setText("Exportar");
+        btnGenerar.addActionListener(this::btnGenerarActionPerformed);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -583,8 +821,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tipoReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(comboReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnMostrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGenerar)))
+                .addContainerGap(313, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -593,8 +835,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tipoReporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14))
+                    .addComponent(comboReportes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14)
+                    .addComponent(btnMostrar)
+                    .addComponent(btnGenerar))
                 .addContainerGap())
         );
 
@@ -772,9 +1016,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         if (fila != -1) {
         String cambio = tablaPrestamos.getValueAt(fila, 0).toString();
         registroDevolucion dialog = new registroDevolucion(null, true, sistemap, cambio);
-        dialog.setVisible(true);   
+        dialog.setVisible(true);  
+        Bitacora.registrar("DEVOLUCION_PRESTAMO", usuarioActual.getId(), "SISTEMAPRESTAMOS");
     }
-        cargarTablaPrestamos();
+        cargarTablas();
     }//GEN-LAST:event_registrarPrestamoActionPerformed
 
     private void modificarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarUsuarioActionPerformed
@@ -786,10 +1031,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         dialog.setVisible(true);
 }
         cargarTablaUsuarios();
+        Bitacora.registrar("MODIFICAR_USUARIO", usuarioActual.getId(), "SISTEMAUSUARIOS");
     }//GEN-LAST:event_modificarUsuarioActionPerformed
 
     private void nuevoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoUsuarioActionPerformed
         agregarEstudiante dialog = new agregarEstudiante(this, true, sistema); 
+        Bitacora.registrar("AGREGAR_USUARIO", usuarioActual.getId(), "SISTEMAUSUARIOS");
         dialog.setVisible(true);
         cargarTablaUsuarios();
         actualizarDatos();                    
@@ -809,6 +1056,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
        if (fila != -1) {
        String codigo = tablaLibros.getValueAt(fila, 0).toString();
        sistemalib.eliminarLibro(codigo);
+       Bitacora.registrar("ELIMINAR_LIBRO", usuarioActual.getId(), "SISTEMALIBROS");
        }
        cargarTablaLibros();
        actualizarDatos();
@@ -820,10 +1068,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         dialog.setVisible(true);
         cargarTablaLibros();
         actualizarDatos();
+        Bitacora.registrar("AGREGAR_LIBRO", usuarioActual.getId(), "SISTEMALIBROS");
     }//GEN-LAST:event_nuevoLibroActionPerformed
 
     private void nuevoOperadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoOperadorActionPerformed
         agregarOperador dialog = new agregarOperador(this, true, sistema); 
+        Bitacora.registrar("AGREGAR_OPERADOR", usuarioActual.getId(), "SISTEMAUSUARIOS");
         dialog.setVisible(true);
         cargarTablaOperadores();
         actualizarDatos();
@@ -834,6 +1084,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
        if (fila != -1) {
        String id = tablaOperadores.getValueAt(fila, 0).toString();
        sistema.eliminarUsuario(id);
+       Bitacora.registrar("ELIMINAR_OPERADOR", usuarioActual.getId(), "SISTEMAUSUARIOS");
        }
        cargarTablaOperadores();
        actualizarDatos();
@@ -844,6 +1095,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         if (fila != -1) {
         String cambio = tablaOperadores.getValueAt(fila, 0).toString();
         editarOperador dialog = new editarOperador(null, true, sistema, cambio);
+        Bitacora.registrar("MODIFICAR_OPERADOR", usuarioActual.getId(), "SISTEMAUSUARIOS");
         dialog.setVisible(true);
 }
         cargarTablaOperadores();
@@ -873,6 +1125,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
        String carne = tablaUsuarios.getValueAt(fila, 0).toString();
        String id = sistema.buscarPorCarne(carne);
        sistema.eliminarUsuario(id);
+       Bitacora.registrar("ELIMINAR_USUARIO", usuarioActual.getId(), "SISTEMAUSUARIOS");
        }
        cargarTablaUsuarios();
        actualizarDatos();
@@ -904,6 +1157,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         dialog.setVisible(true);
         }
         cargarTablaLibros();
+        Bitacora.registrar("MODIFICAR_LIBRO", usuarioActual.getId(), "SISTEMALIBROS");
         actualizarDatos();
     }//GEN-LAST:event_editarLibroActionPerformed
 
@@ -917,10 +1171,49 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_buscarLibrosKeyReleased
 
     private void nuevoPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoPrestamoActionPerformed
-        nuevoPrestamo dialog = new nuevoPrestamo(null, true, sistemap);
+        nuevoPrestamo dialog = new nuevoPrestamo(null, true, sistemap, sistema, sistemalib);
         dialog.setVisible(true);
-        cargarTablaPrestamos();
+        cargarTablas();
+        Bitacora.registrar("AGREGAR_PRESTAMO", usuarioActual.getId(), "SISTEMAPRESTAMOS");
     }//GEN-LAST:event_nuevoPrestamoActionPerformed
+
+    private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
+    String opcion = comboReportes.getSelectedItem().toString();
+
+     if (opcion.equals("Libros disponibles")) {
+        mostrarLibrosDisponibles();
+    } 
+    else if (opcion.equals("Préstamos vencidos")) {
+        mostrarPrestamosVencidos();
+    } 
+    else if (opcion.equals("Top 5 libros")) {
+        mostrarTop5();
+    } 
+    else if (opcion.equals("Estudiantes activos")) {
+        mostrarEstudiantesActivos();
+    }       
+    }//GEN-LAST:event_btnMostrarActionPerformed
+
+    private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
+        String opcion = comboReportes.getSelectedItem().toString();
+    String html = "";
+    Bitacora.registrar("GENERAR_REPORTE", usuarioActual.getId(), "SISTEMAREPORTES");
+
+    if (opcion.equals("Libros disponibles")) {
+        html = sistemarep.reporteLibrosDisponibles();
+    } 
+    else if (opcion.equals("Préstamos vencidos")) {
+        html = sistemarep.reportePrestamosVencidos();
+    } 
+    else if (opcion.equals("Top 5 libros")) {
+        html = sistemarep.reporteTop5Libros();
+    } 
+    else if (opcion.equals("Estudiantes activos")) {
+        html = sistemarep.reporteEstudiantesActivos();
+    }
+
+    sistemarep.guardarReporte(html, "reporte");
+    }//GEN-LAST:event_btnGenerarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -928,12 +1221,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu ayuda;
+    private javax.swing.JButton btnGenerar;
+    private javax.swing.JButton btnMostrar;
     private javax.swing.JTextField buscadorOperadores;
     private javax.swing.JTextField buscarLibros;
     private javax.swing.JTextField buscarUsuario;
     private javax.swing.JLabel cantLibros;
     private javax.swing.JLabel cantPrestamos;
     private javax.swing.JLabel cantUsuarios;
+    private javax.swing.JComboBox<String> comboReportes;
     private javax.swing.JMenu edicion;
     private javax.swing.JButton editarLibro;
     private javax.swing.JButton eliminarLibro;
@@ -985,7 +1281,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JTable tablaReportes;
     private javax.swing.JTable tablaUsuarios;
     private javax.swing.JComboBox<String> tipoDevolucion;
-    private javax.swing.JComboBox<String> tipoReporte;
     private javax.swing.JLabel tipoRol;
     private javax.swing.JLabel tipoSesion;
     private javax.swing.JMenu ver;

@@ -9,10 +9,12 @@ public class SistemaPrestamos {
     
     private Prestamo[] prestamos;
     private int totPrestamos;
+    private SistemaLibros sistemaLib;
     
-    public SistemaPrestamos(int capacidad){
+    public SistemaPrestamos(int capacidad, SistemaLibros sistemaLib){
         this.prestamos = new Prestamo[capacidad];
         this.totPrestamos = 0;
+        this.sistemaLib = sistemaLib;
     }
     
     public void agregarPrestamo(Prestamo p){
@@ -22,6 +24,19 @@ public class SistemaPrestamos {
 
         guardarPrestamoEnArchivo(p);
     }
+}
+    public int getTotPrestamos(){
+        return totPrestamos; 
+    }
+    
+    public int getPrestamosActivos() {
+    int contador = 0;
+    for (int i = 0; i < totPrestamos; i++) {
+        if (prestamos[i].getEstado().equals("ACTIVO")) {
+            contador++;
+        }
+    }
+    return contador;
 }
     
     public Prestamo[] getPrestamos() {
@@ -152,11 +167,26 @@ public class SistemaPrestamos {
     public void devolverLibro(String id){
             for (int i = 0; i < totPrestamos; i++){
                  if (prestamos[i].getCodigoPrestamo().equals(id)){
+                 Prestamo p = prestamos[i];
                  prestamos[i].setEstado("DEVUELTO");
+                 sistemaLib.regresarLibrosPorCodigo(p.getCodigoLibro());
                  break;
              }
         }
          reescribirArchivoPrestamos();
      }
+    
+    
+   public boolean tienePrestamosVencidos(String carnet) {
+    for (int i = 0; i < totPrestamos; i++) {
+        Prestamo p = prestamos[i];
+        if (p.getCarnet().equals(carnet) && p.getEstado().equals("VENCIDO")) {
+            return true; 
+        }
+    }
+    return false; 
+}
+    
+    
     
 }

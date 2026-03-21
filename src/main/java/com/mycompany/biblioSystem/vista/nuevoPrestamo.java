@@ -12,12 +12,17 @@ public class nuevoPrestamo extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(nuevoPrestamo.class.getName());
     private SistemaPrestamos sistema;
+    private SistemaUsuarios sistemau;
+    private SistemaLibros sistemalib;
     /**
      * Creates new form nuevoPrestamo
      */
-    public nuevoPrestamo(java.awt.Frame parent, boolean modal, SistemaPrestamos sistema) {
+    public nuevoPrestamo(java.awt.Frame parent, boolean modal, SistemaPrestamos sistema, 
+            SistemaUsuarios sistemau, SistemaLibros sistemalib) {
         super(parent, modal);
         this.sistema = sistema; 
+        this.sistemau = sistemau;
+        this.sistemalib = sistemalib;
         initComponents();
         
         devolucionTxt.setEditable(false);
@@ -140,10 +145,50 @@ public class nuevoPrestamo extends javax.swing.JDialog {
         String fechaPrestamo = sdf.format(fecha);
         String fechaDevolucion = devolucionTxt.getText();
         String estado = sistema.compararFecha(fechaDevolucion);
-        Prestamo p = new Prestamo(
-        sistema.generarCodigo(fechaPrestamo, fechaDevolucion),carnet,codigoLibro,fechaPrestamo, fechaDevolucion,estado);
-        sistema.agregarPrestamo(p);
-        dispose();
+        String nombreEstudiante = sistemau.getNombreEstudiantePorCarnet(carnet);
+        String nombreLibro = sistemalib.getNombreLibroPorCodigo(codigoLibro);
+        sistemau.actualizarEstadoEstudiante(carnet);
+        boolean prestamosVencidos = sistemau.getEstadoEstudiantePorCarnet(carnet);
+        int prestamosActivos = sistemau.getPrestamosEstudiantePorCarnet(carnet);
+        int librosDisponibles = sistemalib.getCantidadLibrosPorCodigo(codigoLibro); 
+        sistemau.reescribirArchivo();
+        if(prestamosVencidos == false){
+        if (librosDisponibles > 0){
+        if(prestamosActivos < 3){
+        if (!nombreEstudiante.equals("Desconocido")){
+            if (!nombreLibro.equals("Desconocido")){
+            //Si se logrooooo
+            Prestamo p = new Prestamo(
+            sistema.generarCodigo(fechaPrestamo, fechaDevolucion),carnet,codigoLibro,fechaPrestamo, fechaDevolucion,estado);
+            sistema.agregarPrestamo(p);
+            sistemau.setPrestamosEstudiantePorCarnet(carnet);
+            sistemalib.quitarLibrosPorCodigo(codigoLibro);
+            sistemau.reescribirArchivo();
+            
+            
+            dispose();
+            //-------------------------
+            }else{
+            String error = "Error2: El Libro no se ha encontrado";
+            Error dialog = new Error(null, true, error);
+            dialog.setVisible(true);} 
+            }
+        else{
+        String error = "Error2: El usuario no se ha encontrado";
+        Error dialog = new Error(null, true, error);
+        dialog.setVisible(true);}
+        }else{
+        String error = "Error7: Ha excedido el numeroo de Prestamos";
+        Error dialog = new Error(null, true, error);
+        dialog.setVisible(true);}
+        }else{
+        String error = "Error8: No hay copias disponibles";
+        Error dialog = new Error(null, true, error);
+        dialog.setVisible(true);}
+        }else{
+        String error = "Error9: El usuario tiene prestamos pendientes";
+        Error dialog = new Error(null, true, error);
+        dialog.setVisible(true);}
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

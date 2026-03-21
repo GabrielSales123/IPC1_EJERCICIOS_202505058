@@ -135,8 +135,17 @@ public class agregarLibro extends javax.swing.JDialog {
        String genero = generoTxt.getText();
        String anio = (anioTxt.getText());
        int disponibles = Integer.parseInt((disponiblesTxt.getText()));
+       if(!codigo.isEmpty() && !ISBN.isEmpty() && !titulo.isEmpty() && !autor.isEmpty() && 
+           !genero.isEmpty() && !anio.isEmpty()){
+       if (sistema.revisarLibros(codigo, ISBN) == false){
        sistema.agregarLibro(codigo, ISBN, titulo, autor, genero, anio, disponibles);
        dispose();
+       }else{String error = "Error5: codigo o ISBN ya está registrado";
+            Error dialog = new Error(null, true, error);
+            dialog.setVisible(true);}
+       }else{String error = "Error6: Campos incompletos";
+            Error dialog = new Error(null, true, error);
+            dialog.setVisible(true);}
     }//GEN-LAST:event_confirmButtonActionPerformed
 
     /**

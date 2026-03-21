@@ -2,14 +2,18 @@
 package com.mycompany.biblioSystem.controlador;
 import com.mycompany.biblioSystem.modelo.*;
 import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
 public class SistemaUsuarios {
     
   private Usuario[] usuarios; 
   private int totUsuarios; 
+  private SistemaPrestamos sistemaPrestamos;
   
-  public SistemaUsuarios(int capacidad){
+  public SistemaUsuarios(int capacidad, SistemaPrestamos sp){
       this.usuarios = new Usuario[capacidad];
       this.totUsuarios = 0; 
+       this.sistemaPrestamos = sp;
   }
   
   public Usuario login(String id, String password){
@@ -24,6 +28,7 @@ public class SistemaUsuarios {
 
     return null;
 }
+  
   
     public int getTotalUsuarios() {
       return totUsuarios;
@@ -233,8 +238,6 @@ public class SistemaUsuarios {
             contador++;
         }
     }
-    
-    
     Usuario[] estudiantes = new Usuario[contador];
     int in = 0;
     for (int i = 0; i < totUsuarios; i++) {
@@ -245,7 +248,24 @@ public class SistemaUsuarios {
     }
     return estudiantes;
 }
+   public Usuario[] getUsuarios() {
+        return usuarios;
+    }
+   
     
+   public boolean revisarEstudiantes(String nuevoCarne, String nuevoId) {
+    for (int i = 0; i < totUsuarios; i++) {
+        if (usuarios[i] instanceof Estudiante) { 
+            Estudiante estudiante = (Estudiante) usuarios[i];
+            if (nuevoCarne.equals(estudiante.getCarne()) ||
+                nuevoId.equals(estudiante.getId())){
+                return true;
+             }
+            }
+        }
+    return false;
+   }
+   
    public void agregarEstudiante(String id, String nombre, String password, String carne, String carrera,
            String correo){
        boolean estadoPrestamos = false;
@@ -289,6 +309,90 @@ public class SistemaUsuarios {
     }
     return null;
 }
+   
+   public Estudiante buscarEstudiantePorCarne(String carnet) {
+    for (int i = 0; i < totUsuarios; i++) {
+        if (usuarios[i] instanceof Estudiante e) {
+            if (e.getCarne().equals(carnet)) {
+                return e;
+            }
+        }
+    }
+    return null;
+}
+   
+   
+    public String getNombreEstudiantePorCarnet(String carnet) {
+        for (int i = 0; i < totUsuarios; i++) {
+             if (usuarios[i] instanceof Estudiante) {
+                Estudiante e = (Estudiante) usuarios[i];
+                if (e.getCarne().equals(carnet)) {
+                return e.getNombre();
+                }
+            }
+        }
+        return "Desconocido";
+    }
+    
+    public boolean getEstadoEstudiantePorCarnet(String carnet) {
+        for (int i = 0; i < totUsuarios; i++) {
+             if (usuarios[i] instanceof Estudiante) {
+                Estudiante e = (Estudiante) usuarios[i];
+                if (e.getCarne().equals(carnet)) {
+                return e.getEstadoPrestamos();
+                }
+            }
+        }
+        return false;
+    }
+    
+    public void setEstadoEstudiantePorCarnet(String carnet) {
+        for (int i = 0; i < totUsuarios; i++) {
+             if (usuarios[i] instanceof Estudiante) {
+                Estudiante e = (Estudiante) usuarios[i];
+                if (e.getCarne().equals(carnet)) {
+                e.setEstadoPrestamos(true);
+                }
+            }
+        }
+    }
+    
+    public void setPrestamosEstudiantePorCarnet(String carnet) {
+        for (int i = 0; i < totUsuarios; i++) {
+             if (usuarios[i] instanceof Estudiante) {
+                Estudiante e = (Estudiante) usuarios[i];
+                if (e.getCarne().equals(carnet)) {
+                int contPrestamos =  e.getPrestamosActivos();
+                contPrestamos++;
+                e.setPrestamosActivos(contPrestamos);
+                    
+                }
+            }
+        }
+    }
+   
+   public int getPrestamosEstudiantePorCarnet(String carnet) {
+        for (int i = 0; i < totUsuarios; i++) {
+             if (usuarios[i] instanceof Estudiante) {
+                Estudiante e = (Estudiante) usuarios[i];
+                if (e.getCarne().equals(carnet)) {
+                int contPrestamos =  e.getPrestamosActivos();
+                return contPrestamos;        
+                }
+            }
+        }
+        return 0;
+    }
+   
+   public void actualizarEstadoEstudiante(String carnet) {
+    Estudiante e = buscarEstudiantePorCarne(carnet);
+    if (e != null) {
+        boolean vencido = sistemaPrestamos.tienePrestamosVencidos(carnet);
+        e.setEstadoPrestamos(vencido);
+    }
+    reescribirArchivo();
+}
+   
    
   //--------------------------------------------------------------------
   

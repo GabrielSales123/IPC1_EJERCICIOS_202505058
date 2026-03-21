@@ -69,5 +69,77 @@ public class SistemaLibros {
     }
      
      
+    public String getNombreLibroPorCodigo(String codigo) {
+        for (int i = 0; i < totLibros; i++) {
+             
+                Libro lib = (Libro) libros[i];
+                if (lib.getCodigo().equals(codigo)) {
+                return lib.getTitulo();
+                
+            }
+        }
+        return "Desconocido";
+    }
+    
+    public int getCantidadLibrosPorCodigo(String codigo) {
+        for (int i = 0; i < totLibros; i++) {
+             
+                Libro lib = (Libro) libros[i];
+                if (lib.getCodigo().equals(codigo)) {
+                int contador = lib.getDisponibles();
+                return contador; 
+            }
+        }
+        return 0;
+    }
+    
+    public void quitarLibrosPorCodigo(String codigo) {
+    for (int i = 0; i < totLibros; i++) {
+
+        Libro lib = libros[i];
+        if (lib.getCodigo().equals(codigo)) {
+
+            lib.setDisponibles(lib.getDisponibles() - 1);
+            return; 
+        }
+    }
+}
+    
+    public void regresarLibrosPorCodigo(String codigo) {
+    for (int i = 0; i < totLibros; i++) {
+
+        Libro lib = libros[i];
+        if (lib.getCodigo().equals(codigo)) {
+            int disponibles = lib.getDisponibles();
+            lib.setDisponibles(disponibles + 1);
+            return; 
+        }
+    }
+}
+    
+     public void agregarLibrosPorCodigo(String codigo) {
+        for (int i = 0; i < totLibros; i++) {
+             
+                Libro lib = (Libro) libros[i];
+                if (lib.getCodigo().equals(codigo)) {
+                int contador = lib.getDisponibles();
+                contador++;
+            }
+        }
+        
+    }
+    
+    public boolean revisarLibros(String nuevoCodigo, String nuevoISBN) {
+    for (int i = 0; i < totLibros; i++) {
+        Libro lib = (Libro) libros[i];
+            if (nuevoCodigo.equals(lib.getCodigo()) ||
+                nuevoISBN.equals(lib.getISBN())){
+                return true;
+             }
+            
+        }
+    return false;
+   }
+    
     
 }

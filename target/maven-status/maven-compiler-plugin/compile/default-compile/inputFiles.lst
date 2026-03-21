@@ -1,8 +1,10 @@
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\controlador\controlAutenticacion.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\controlador\SistemaLibros.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\controlador\SistemaPrestamos.java
+C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\controlador\SistemaReportes.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\controlador\SistemaUsuarios.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\modelo\Administrador.java
+C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\modelo\Bitacora.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\modelo\Estudiante.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\modelo\Libro.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\modelo\Operador.java
@@ -15,6 +17,7 @@ C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompa
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\vista\editarEstudiante.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\vista\editarLibro.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\vista\editarOperador.java
+C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\vista\Error.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\vista\Login.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\vista\MenuPrincipal.java
 C:\Users\Andri\Documents\NetBeansProjects\BiblioSystem\src\main\java\com\mycompany\biblioSystem\vista\nuevoPrestamo.java
